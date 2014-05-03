@@ -6,19 +6,17 @@ class window.App extends Backbone.Model
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
 
-    @on('busted', @gameOver, @)
+    @on 'busted blackjack', => @gameOver
 
-  # listen to player for Stand
   events:
-  # invoke dealer to complete game
     'stand': ->
         do (@get 'dealerHand').complete
-  # if restart triggered deal again
     'restart': ->do (@initialize)
     #'busted': ->do console.log("busted")
 
   gameOver: ->
-    @.trigger('gameOver')
+    console.log('app model gameOver method is called')
+    @trigger('gameOver')
 
   redeal: ->
     if (@get 'deck').length > 10

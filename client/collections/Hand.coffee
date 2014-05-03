@@ -3,12 +3,14 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
-    @on('add', @isBusted, @)
+    @set('stood', false)
+    # @on('add', @isBlackjack, @) TODO
 
   hit: ->
-    @add(@deck.pop()).last()
+    if not @isBusted() and not @get('stood') then @add(@deck.pop()).last()
 
   stand: ->
+    # @set('stood', true)
     @trigger('stand', @)
     console.log("stood")
 
@@ -18,7 +20,11 @@ class window.Hand extends Backbone.Collection
   isBusted: ->
     console.log("in isBusted in hand model ", @scores()[0])
     if @scores()[0] > 21
+      console.log("and now I'm triggering busted from in here...")
       @trigger('busted')
+
+  isBlackjack: ->
+    @trigger('blackjack')
 
   scores: ->
     # The scores are an array of potential scores.

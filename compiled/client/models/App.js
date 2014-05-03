@@ -15,7 +15,11 @@
       this.set('deck', deck = new Deck());
       this.set('playerHand', deck.dealPlayer());
       this.set('dealerHand', deck.dealDealer());
-      return this.on('busted', this.gameOver, this);
+      return this.on('busted blackjack', (function(_this) {
+        return function() {
+          return _this.gameOver;
+        };
+      })(this));
     };
 
     App.prototype.events = {
@@ -28,6 +32,7 @@
     };
 
     App.prototype.gameOver = function() {
+      console.log('app model gameOver method is called');
       return this.trigger('gameOver');
     };
 

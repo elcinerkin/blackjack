@@ -15,11 +15,13 @@
     Hand.prototype.initialize = function(array, deck, isDealer) {
       this.deck = deck;
       this.isDealer = isDealer;
-      return this.on('add', this.isBusted, this);
+      return this.set('stood', false);
     };
 
     Hand.prototype.hit = function() {
-      return this.add(this.deck.pop()).last();
+      if (!this.isBusted() && !this.get('stood')) {
+        return this.add(this.deck.pop()).last();
+      }
     };
 
     Hand.prototype.stand = function() {
@@ -34,8 +36,13 @@
     Hand.prototype.isBusted = function() {
       console.log("in isBusted in hand model ", this.scores()[0]);
       if (this.scores()[0] > 21) {
+        console.log("and now I'm triggering busted from in here...");
         return this.trigger('busted');
       }
+    };
+
+    Hand.prototype.isBlackjack = function() {
+      return this.trigger('blackjack');
     };
 
     Hand.prototype.scores = function() {

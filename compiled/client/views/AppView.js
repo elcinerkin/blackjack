@@ -10,7 +10,7 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <button class="redeal-button">Redeal</button> <div class="player-hand-container"></div> <div class="dealer-hand-container"></div>');
+    AppView.prototype.template = _.template('<button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <button class="redeal-button">Redeal</button> <div class="player-hand-container"></div> <div class="dealer-hand-container"></div> <div class="game-over"></div>');
 
     AppView.prototype.events = {
       "click .hit-button": function() {
@@ -20,7 +20,12 @@
         return this.model.get('playerHand').stand();
       },
       "click .redeal-button": function() {
-        return this.model.redeal();
+        this.model.redeal();
+        return this.render();
+      },
+      "gameOver": function() {
+        $el.find('.game-over').html("Game Over!");
+        return console.log("game over called");
       }
     };
 

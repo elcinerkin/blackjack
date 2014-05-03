@@ -3,9 +3,22 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
+    @on('add', @isBusted, @)
 
   hit: ->
     @add(@deck.pop()).last()
+
+  stand: ->
+    @trigger('stand', @)
+    console.log("stood")
+
+  complete: ->
+    console.log("in complete")
+
+  isBusted: ->
+    console.log("in isBusted in hand model ", @scores()[0])
+    if @scores()[0] > 21
+      @trigger('busted')
 
   scores: ->
     # The scores are an array of potential scores.

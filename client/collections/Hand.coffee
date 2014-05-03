@@ -14,12 +14,14 @@ class window.Hand extends Backbone.Collection
     @trigger('stand', @)
     console.log("stood")
 
-  complete: ->
-    console.log("in complete")
+  # complete: ->
+  #   #complete the dealer hand routine
+  #   console.log("in complete")
+
 
   isBusted: ->
     console.log("in isBusted in hand model ", @scores()[0])
-    if @scores()[0] > 21
+    if @scores()[0] > 20
       console.log("and now I'm triggering busted from in here...")
       @trigger('busted')
 

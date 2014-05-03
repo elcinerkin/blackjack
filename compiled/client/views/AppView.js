@@ -22,15 +22,12 @@
       "click .redeal-button": function() {
         this.model.redeal();
         return this.render();
-      },
-      "gameOver": function() {
-        $el.find('.game-over').html("Game Over!");
-        return console.log("game over called");
       }
     };
 
     AppView.prototype.initialize = function() {
-      return this.render();
+      this.render();
+      return this.on("gameOver", this.gameOver, this);
     };
 
     AppView.prototype.render = function() {
@@ -39,9 +36,15 @@
       this.$('.player-hand-container').html(new HandView({
         collection: this.model.get('playerHand')
       }).el);
-      return this.$('.dealer-hand-container').html(new HandView({
+      this.$('.dealer-hand-container').html(new HandView({
         collection: this.model.get('dealerHand')
       }).el);
+      return {
+        gameOver: function() {
+          $el.find('.game-over').html("Game Over!");
+          return console.log("game over called");
+        }
+      };
     };
 
     return AppView;

@@ -14,12 +14,11 @@ class window.AppView extends Backbone.View
     "click .redeal-button": ->
       @model.redeal()
       @render()
-    "gameOver": ->
-      $el.find('.game-over').html("Game Over!")
-      console.log("game over called")
 
   initialize: ->
     @render()
+    @on("gameOver", @gameOver, @)
+    # @on("stand", @stand, @)
 
   render: ->
     @$el.children().detach()
@@ -27,3 +26,9 @@ class window.AppView extends Backbone.View
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
 
+    gameOver: ->
+      $el.find('.game-over').html("Game Over!")
+      console.log("game over called")
+
+    # stand: ->
+    #   console.log("stand triggered and caught by appview")

@@ -29,13 +29,9 @@
       return console.log("stood");
     };
 
-    Hand.prototype.complete = function() {
-      return console.log("in complete");
-    };
-
     Hand.prototype.isBusted = function() {
       console.log("in isBusted in hand model ", this.scores()[0]);
-      if (this.scores()[0] > 21) {
+      if (this.scores()[0] > 20) {
         console.log("and now I'm triggering busted from in here...");
         return this.trigger('busted');
       }

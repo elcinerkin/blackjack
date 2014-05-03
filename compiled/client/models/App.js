@@ -15,20 +15,8 @@
       this.set('deck', deck = new Deck());
       this.set('playerHand', deck.dealPlayer());
       this.set('dealerHand', deck.dealDealer());
-      return this.on('busted blackjack', (function(_this) {
-        return function() {
-          return _this.gameOver;
-        };
-      })(this));
-    };
-
-    App.prototype.events = {
-      'stand': function() {
-        return (this.get('dealerHand')).complete();
-      },
-      'restart': function() {
-        return this.initialize();
-      }
+      this.on('busted blackjack', this.gameOver, this);
+      return (this.get('playerHand')).on('stand', this.stand, this);
     };
 
     App.prototype.gameOver = function() {
@@ -43,6 +31,16 @@
       } else {
         return this.intitialize();
       }
+    };
+
+    App.prototype.stand = function() {
+      console.log("stand triggered and caught by appmodel");
+      debugger;
+      (this.get('dealerHand')).models[0].flip();
+      while (Math.max.apply(0, (this.get('dealerHand')).scores()) < (this.get('playerHand')).scores()) {
+        (this.get('dealerHand')).hit();
+      }
+      return this.gameOver;
     };
 
     return App;

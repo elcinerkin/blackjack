@@ -10,20 +10,23 @@ class window.Hand extends Backbone.Collection
     if not @isBusted() and not @get('stood') then @add(@deck.pop()).last()
 
   stand: ->
-    # @set('stood', true)
+    #@set('stood', true)
     @trigger('stand', @)
     console.log("stood")
 
-  # complete: ->
-  #   #complete the dealer hand routine
-  #   console.log("in complete")
-
+  playOut: ->
+    console.log("in complete")
+    @first().flip()
+    while @scores()[0]<17
+      @hit()
+    @trigger('stand')
 
   isBusted: ->
     console.log("in isBusted in hand model ", @scores()[0])
     if @scores()[0] > 20
       console.log("and now I'm triggering busted from in here...")
       @trigger('busted')
+      @stand()
 
   isBlackjack: ->
     @trigger('blackjack')

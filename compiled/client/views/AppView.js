@@ -10,7 +10,7 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <button class="redeal-button">Redeal</button> <div class="player-hand-container"></div> <div class="dealer-hand-container"></div> <div class="game-over"></div>');
+    AppView.prototype.template = _.template('<button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <div class="player-hand-container"></div> <div class="dealer-hand-container"></div> <div disabled="disabled" class="game-over"></div>');
 
     AppView.prototype.events = {
       "click .hit-button": function() {
@@ -27,7 +27,7 @@
 
     AppView.prototype.initialize = function() {
       this.render();
-      return this.on("gameOver", this.gameOver, this);
+      return this.model.on('winner', this.endGame, this);
     };
 
     AppView.prototype.render = function() {
@@ -36,15 +36,15 @@
       this.$('.player-hand-container').html(new HandView({
         collection: this.model.get('playerHand')
       }).el);
-      this.$('.dealer-hand-container').html(new HandView({
+      return this.$('.dealer-hand-container').html(new HandView({
         collection: this.model.get('dealerHand')
       }).el);
-      return {
-        gameOver: function() {
-          $el.find('.game-over').html("Game Over!");
-          return console.log("game over called");
-        }
-      };
+    };
+
+    AppView.prototype.endGame = function(whoWon) {
+      console.log('ending game with ' + whoWon);
+      this.$el.find('.game-over').html(whoWon + " won!");
+      return this.$el.find('button').attr('disabled', true).append($('<button class="redeal-button">Redeal</button>'));
     };
 
     return AppView;

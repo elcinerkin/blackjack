@@ -29,11 +29,21 @@
       return console.log("stood");
     };
 
+    Hand.prototype.playOut = function() {
+      console.log("in complete");
+      this.first().flip();
+      while (this.scores()[0] < 17) {
+        this.hit();
+      }
+      return this.trigger('stand');
+    };
+
     Hand.prototype.isBusted = function() {
       console.log("in isBusted in hand model ", this.scores()[0]);
       if (this.scores()[0] > 20) {
         console.log("and now I'm triggering busted from in here...");
-        return this.trigger('busted');
+        this.trigger('busted');
+        return this.stand();
       }
     };
 

@@ -15,13 +15,8 @@
       this.set('deck', deck = new Deck());
       this.set('playerHand', deck.dealPlayer());
       this.set('dealerHand', deck.dealDealer());
-      this.on('busted blackjack', this.gameOver, this);
-      return (this.get('playerHand')).on('stand', this.stand, this);
-    };
-
-    App.prototype.gameOver = function() {
-      console.log('app model gameOver method is called');
-      return this.trigger('gameOver');
+      (this.get('playerHand')).on('all', this.playerStuff, this);
+      return (this.get('dealerHand')).on('all', this.dealerStuff, this);
     };
 
     App.prototype.redeal = function() {
@@ -33,14 +28,34 @@
       }
     };
 
-    App.prototype.stand = function() {
-      console.log("stand triggered and caught by appmodel");
-      debugger;
-      (this.get('dealerHand')).models[0].flip();
-      while (Math.max.apply(0, (this.get('dealerHand')).scores()) < (this.get('playerHand')).scores()) {
-        (this.get('dealerHand')).hit();
+    App.prototype.playerStuff = function(event) {
+      switch (event) {
+        case 'stand':
+          return (this.get('dealerHand')).playOut();
+        case 'busted':
+          return this.trigger('winner:dealer');
       }
-      return this.gameOver;
+    };
+
+    App.prototype.dealerStuff = function(event) {
+      switch (event) {
+        case 'stand':
+          return this.findWinner();
+        case 'busted':
+          return this.trigger('winner:player');
+      }
+    };
+
+    App.prototype.findWinner = function() {
+      var dealerScore, playerScore;
+      console.log('finding winner...');
+      playerScore = Math.max((this.get('playerHand')).scores());
+      dealerScore = Math.max((this.get('dealerHand')).scores());
+      if (playerScore > dealerScore) {
+        return this.trigger('winner', 'Player');
+      } else {
+        return this.trigger('winner', 'Dealer');
+      }
     };
 
     return App;
